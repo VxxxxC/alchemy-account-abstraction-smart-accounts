@@ -2,7 +2,7 @@ import * as hre from "hardhat";
 
 async function main(){
   const entryPoint = await hre.viem.deployContract("AccountFactory");
-  console.log("contract deployed at : ", entryPoint.address );
+  console.log("Account Factory deployed at : ", entryPoint.address );
 }
 
 main().catch((err) => {
