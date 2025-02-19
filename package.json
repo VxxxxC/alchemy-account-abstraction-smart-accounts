@@ -14,5 +14,8 @@
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
     "hardhat": "^2.22.18"
+  },
+  "dependencies": {
+    "@account-abstraction/contracts": "^0.6.0"
   }
 }
