@@ -9,19 +9,23 @@ async function main() {
     const address = await signer.getAddress();
     const entryPoint = await hre.ethers.getContractAt("EntryPoint", ENTRY_POINT_ADDRESS);
 
-    const sender = hre.ethers.getCreateAddress({ from: FACTORY_ADDRESS, nonce: FACTORY_NONCE });
+    const sender = await hre.ethers.getCreateAddress({ from: FACTORY_ADDRESS, nonce: FACTORY_NONCE });
+    
+    await entryPoint.depositTo(sender, {
+        value: hre.ethers.parseEther("100")
+    })
 
     // CREATE: hash(deployer + nonce)
     // CREATE2: hash(0xFF + deployer + bytecode + salt)
 
     const AccountFactory = await hre.ethers.getContractFactory("AccountFactory");
     const Account = await hre.ethers.getContractFactory("Account");
-    const initCode = FACTORY_ADDRESS + AccountFactory.interface.encodeFunctionData("createAccount",[address]);
+    const initCode = FACTORY_ADDRESS + AccountFactory.interface.encodeFunctionData("createAccount",[address]).slice(2);
 
     const userOp = {
         sender, // smart account address
-        nonce: await entryPoint.getNonce(sender),
-        initCode,
+        nonce: await entryPoint.getNonce(sender, 0),
+        initCode: initCode,
         callData: Account.interface.encodeFunctionData("execute"),
         callGasLimit: 200_00,
         verificationGasLimit: 200_00,
@@ -31,8 +35,12 @@ async function main() {
         paymasterAndData: "0x",
         signature: "0x",
     }
+    console.log(userOp.initCode.length)
+    console.log(userOp)
 
-    console.log({userOp})
+    const tx = await entryPoint.handleOps([userOp], address);
+    const receipt = await tx.wait();
+    console.log({receipt});
 }
 
 main().catch((err) => {
