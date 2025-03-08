@@ -20,20 +20,20 @@ async function main() {
 
   console.log({sender});
 
-  await entryPoint.depositTo(PAYMASTER_ADDRESS, {
-    value: hre.ethers.parseEther("100"),
-  });
+  // await entryPoint.depositTo(PAYMASTER_ADDRESS, {
+  //   value: hre.ethers.parseEther("100"),
+  // });
 
   // CREATE: hash(deployer + nonce)
   // CREATE2: hash(0xFF + deployer + bytecode + salt)
 
   const AccountFactory = await hre.ethers.getContractFactory("AccountFactory");
   const Account = await hre.ethers.getContractFactory("Account");
-  const initCode =
-    FACTORY_ADDRESS +
-    AccountFactory.interface
-      .encodeFunctionData("createAccount", [address])
-      .slice(2);
+  const initCode = "0x";
+    // FACTORY_ADDRESS +
+    // AccountFactory.interface
+    //   .encodeFunctionData("createAccount", [address])
+    //   .slice(2);
 
   const userOp = {
     sender, // NOTE: SMART ACCOUNT ADDRESS
