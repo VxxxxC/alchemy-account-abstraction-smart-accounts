@@ -36,13 +36,13 @@ async function main() {
       .slice(2);
 
   const userOp = {
-    sender, // smart account address
+    sender, // NOTE: SMART ACCOUNT ADDRESS
     nonce: await entryPoint.getNonce(sender, 0),
     initCode,
     callData: Account.interface.encodeFunctionData("execute"),
-    callGasLimit: 200_000, //BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
-    verificationGasLimit: 200_000, //BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
-    preVerificationGas: 500_000, //BUG: IF 500_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
+    callGasLimit: 200_000, // BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
+    verificationGasLimit: 200_000, // BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
+    preVerificationGas: 500_000, // BUG: IF 500_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
     maxFeePerGas: hre.ethers.parseUnits("20", "gwei"),
     maxPriorityFeePerGas: hre.ethers.parseUnits("10", "gwei"),
     paymasterAndData: PAYMASTER_ADDRESS,
