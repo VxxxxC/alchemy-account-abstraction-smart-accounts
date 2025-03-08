@@ -6,7 +6,7 @@ const FACTORY_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 const PAYMASTER_ADDRESS = "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0";
 
 async function main() {
-  const [signer] = await hre.ethers.getSigners();
+  const [signer, signer1] = await hre.ethers.getSigners();
   const address = await signer.getAddress();
   const entryPoint = await hre.ethers.getContractAt(
     "EntryPoint",
@@ -20,9 +20,9 @@ async function main() {
   console.log({ sender });
 
   //* NOTE: By the first time of deploying and creating an smart account, the entryPoint will send 100 ETH to the paymaster 
-   await entryPoint.depositTo(PAYMASTER_ADDRESS, {
-     value: hre.ethers.parseEther("100"),
-   });
+  //  await entryPoint.depositTo(PAYMASTER_ADDRESS, {
+  //    value: hre.ethers.parseEther("100"),
+  //  });
    
 
   // CREATE: hash(deployer + nonce)
@@ -31,15 +31,15 @@ async function main() {
   const AccountFactory = await hre.ethers.getContractFactory("AccountFactory");
   const Account = await hre.ethers.getContractFactory("Account");
   const initCode = 
-  // "0x";
-  FACTORY_ADDRESS +
-  AccountFactory.interface
-    .encodeFunctionData("createAccount", [address])
-    .slice(2);
+  "0x";
+  // FACTORY_ADDRESS +
+  // AccountFactory.interface
+  //   .encodeFunctionData("createAccount", [address])
+  //   .slice(2);
 
   const hashMsg = hre.ethers.id("testHashMessage..");
   const toBytes = hre.ethers.getBytes(hashMsg);
-  const signature = signer.signMessage(toBytes);
+  const signature = signer1.signMessage(toBytes);
 
   const userOp = {
     sender, //* NOTE: SMART ACCOUNT ADDRESS
