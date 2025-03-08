@@ -1,8 +1,9 @@
 import * as hre from "hardhat";
 
 const FACTORY_NONCE = 1;
-const ENTRY_POINT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
-const FACTORY_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
+const ENTRY_POINT_ADDRESS = "0x7a2088a1bfc9d81c55368ae168c2c02570cb814f";
+const FACTORY_ADDRESS = "0x09635f643e140090a9a8dcd712ed6285858cebef";
+const PAYMASTER_ADDRESS = "0xc5a5c42992decbae36851359345fe25997f5c42d";
 
 async function main() {
   const [signer] = await hre.ethers.getSigners();
@@ -17,7 +18,9 @@ async function main() {
     nonce: FACTORY_NONCE,
   });
 
-  await entryPoint.depositTo(sender, {
+  console.log({sender});
+
+  await entryPoint.depositTo(PAYMASTER_ADDRESS, {
     value: hre.ethers.parseEther("100"),
   });
 
@@ -37,12 +40,12 @@ async function main() {
     nonce: await entryPoint.getNonce(sender, 0),
     initCode,
     callData: Account.interface.encodeFunctionData("execute"),
-    callGasLimit: 200_00,
-    verificationGasLimit: 200_00,
-    preVerificationGas: 500_00,
-    maxFeePerGas: hre.ethers.parseUnits("10", "gwei"),
-    maxPriorityFeePerGas: hre.ethers.parseUnits("5", "gwei"),
-    paymasterAndData: "0x",
+    callGasLimit: 200_000,
+    verificationGasLimit: 200_000,
+    preVerificationGas: 500_000,
+    maxFeePerGas: hre.ethers.parseUnits("20", "gwei"),
+    maxPriorityFeePerGas: hre.ethers.parseUnits("10", "gwei"),
+    paymasterAndData: PAYMASTER_ADDRESS,
     signature: "0x",
   };
 
