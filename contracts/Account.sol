@@ -15,11 +15,15 @@ contract Account is IAccount {
     }
 
     function validateUserOp(
-        UserOperation calldata,
+        UserOperation calldata userOp,
         bytes32,
         uint256
     ) external pure returns (uint256 validationData) {
-        return 0;
+        bytes32 message = ECDSA.toEthSignedMessageHash(
+            keccak256("testHashMessage..")
+        );
+        address recovered = ECDSA.recover(message, userOp.signature);
+        console.log(recovered);
     }
 
     function execute() external {
@@ -35,14 +39,5 @@ contract AccountFactory {
 }
 
 contract Test {
-    constructor(bytes memory sig) {
-        bytes32 message = ECDSA.toEthSignedMessageHash(
-            keccak256("testHashMessage..")
-        );
-        console.logBytes32(message);
-        console.logBytes(sig);
-
-        address recovered = ECDSA.recover(message, sig);
-        console.log(recovered);
-    }
+    constructor(bytes memory sig) {}
 }
