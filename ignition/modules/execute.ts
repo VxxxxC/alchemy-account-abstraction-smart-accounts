@@ -30,16 +30,13 @@ async function main() {
 
   const AccountFactory = await hre.ethers.getContractFactory("AccountFactory");
   const Account = await hre.ethers.getContractFactory("Account");
+  
   const initCode = 
   "0x";
   // FACTORY_ADDRESS +
   // AccountFactory.interface
   //   .encodeFunctionData("createAccount", [address])
   //   .slice(2);
-
-  const hashMsg = hre.ethers.id("testHashMessage..");
-  const toBytes = hre.ethers.getBytes(hashMsg);
-  const signature = signer1.signMessage(toBytes);
 
   const userOp = {
     sender, //* NOTE: SMART ACCOUNT ADDRESS
@@ -52,8 +49,12 @@ async function main() {
     maxFeePerGas: hre.ethers.parseUnits("20", "gwei"),
     maxPriorityFeePerGas: hre.ethers.parseUnits("10", "gwei"),
     paymasterAndData: PAYMASTER_ADDRESS,
-    signature,
+    signature: "0x",
   };
+
+  const userOpHash = await entryPoint.getUserOpHash(userOp);
+  userOp.signature = await signer.signMessage(hre.ethers.getBytes(userOpHash));
+  // userOp.signature = await signer1.signMessage(hre.ethers.getBytes(userOpHash)); //* NOTE: THIS SIGNATURE FROM ANOTHER ACCOUNT , FOR TRYING THE EXPECTED 'FailedOp(0, "AA24 signature error")' ERROR ON EXECUTION
 
   const tx = await entryPoint.handleOps([userOp], address);
   const receipt = await tx.wait();

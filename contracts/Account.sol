@@ -16,12 +16,10 @@ contract Account is IAccount {
 
     function validateUserOp(
         UserOperation calldata userOp,
-        bytes32,
+        bytes32 userOpHash,
         uint256
     ) external view returns (uint256 validationData) {
-        bytes32 message = ECDSA.toEthSignedMessageHash(
-            keccak256("testHashMessage..")
-        );
+        bytes32 message = ECDSA.toEthSignedMessageHash(userOpHash);
         address recovered = ECDSA.recover(message, userOp.signature);
 
         return owner == recovered ? 0 : 1;
