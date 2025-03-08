@@ -1,6 +1,6 @@
 import * as hre from "hardhat";
 
-const ACCOUNT_ADDRESS = "0xeC4cFde48EAdca2bC63E94BB437BbeAcE1371bF3";
+const ACCOUNT_ADDRESS = "0xe73bc5BD4763A3307AB5F8F126634b7E12E3dA9b";
 async function main(){
 
   const account = await hre.ethers.getContractAt("Account", ACCOUNT_ADDRESS);
