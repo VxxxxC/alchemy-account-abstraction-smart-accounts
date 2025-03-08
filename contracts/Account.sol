@@ -18,12 +18,13 @@ contract Account is IAccount {
         UserOperation calldata userOp,
         bytes32,
         uint256
-    ) external pure returns (uint256 validationData) {
+    ) external view returns (uint256 validationData) {
         bytes32 message = ECDSA.toEthSignedMessageHash(
             keccak256("testHashMessage..")
         );
         address recovered = ECDSA.recover(message, userOp.signature);
-        console.log(recovered);
+
+        return owner == recovered ? 0 : 1;
     }
 
     function execute() external {
