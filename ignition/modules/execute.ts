@@ -45,14 +45,16 @@ async function main() {
     nonce: await entryPoint.getNonce(sender, 0),
     initCode,
     callData: Account.interface.encodeFunctionData("execute"),
-    callGasLimit: 500_000, //! BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
-    verificationGasLimit: 500_000, //! BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
-    preVerificationGas: 1000_000, //! BUG: IF 500_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
-    maxFeePerGas: hre.ethers.parseUnits("20", "gwei"),
-    maxPriorityFeePerGas: hre.ethers.parseUnits("10", "gwei"),
     paymasterAndData: PAYMASTER_ADDRESS,
     signature: "0x",
   };
+
+  //? TODO: implement by calling from real API data, instead using fake hardcode gas value data
+  // callGasLimit: 500_000, //! BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
+  // verificationGasLimit: 500_000, //! BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
+  // preVerificationGas: 1000_000, //! BUG: IF 500_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
+  // maxFeePerGas: hre.ethers.parseUnits("20", "gwei"),
+  // maxPriorityFeePerGas: hre.ethers.parseUnits("10", "gwei"),
 
   const userOpHash = await entryPoint.getUserOpHash(userOp);
   userOp.signature = await signer.signMessage(hre.ethers.getBytes(userOpHash));
