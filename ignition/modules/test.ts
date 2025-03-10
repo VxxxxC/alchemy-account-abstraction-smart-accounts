@@ -1,25 +1,33 @@
 import * as hre from "hardhat";
 
-const ACCOUNT_ADDRESS = "0xCafac3dD18aC6c6e92c921884f9E4176737C052c";
+const ACCOUNT_ADDRESS = "0x1ebd4434952a68cef2873fb02bc67ef6704c863c";
 const ENTRY_POINT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 const PAYMASTER_ADDRESS = "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0";
 
-async function main(){
-
+async function main() {
   const account = await hre.ethers.getContractAt("Account", ACCOUNT_ADDRESS);
   const count = await account.count();
-  console.log("count : ", count );
+  console.log("count : ", count);
 
   const balance = await hre.ethers.provider.getBalance(ACCOUNT_ADDRESS);
-  console.log("balance : ", balance );
+  console.log("balance : ", balance);
 
-  const entryPoint = await hre.ethers.getContractAt("EntryPoint", ENTRY_POINT_ADDRESS);
-  console.log("Entry Point balance : ", await entryPoint.balanceOf(ACCOUNT_ADDRESS) );
-  console.log("Paymaster balance : ", await entryPoint.balanceOf(PAYMASTER_ADDRESS) );
-
+  const entryPoint = await hre.ethers.getContractAt(
+    "EntryPoint",
+    ENTRY_POINT_ADDRESS
+  );
+  console.log(
+    "Entry Point balance : ",
+    await entryPoint.balanceOf(ACCOUNT_ADDRESS)
+  );
+  console.log(
+    "Paymaster balance : ",
+    await entryPoint.balanceOf(PAYMASTER_ADDRESS)
+  );
 }
 
 main().catch((err) => {
   console.error(err);
-  process.exitCode = 1
-})
+  process.exitCode = 1;
+});
+
