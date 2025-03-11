@@ -17,7 +17,7 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  defaultNetwork: "localhost",
+  defaultNetwork: "arb",
   networks: {
     arb: {
       url: process.env.RPC_URL as string,
