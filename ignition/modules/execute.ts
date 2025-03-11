@@ -46,7 +46,8 @@ async function main() {
     initCode,
     callData: Account.interface.encodeFunctionData("execute"),
     paymasterAndData: PAYMASTER_ADDRESS,
-    signature: "0x",
+    signature:
+      "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
   };
 
   const res = await hre.ethers.provider.send("eth_estimateUserOperationGas", [
