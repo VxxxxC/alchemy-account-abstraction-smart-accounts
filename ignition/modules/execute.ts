@@ -28,8 +28,7 @@ async function main() {
   try {
     await entryPoint.getSenderAddress(initCode);
   } catch (err: any) {
-    console.log("err : ", err);
-    sender = "0x" + err.data.data.slice(-40);
+    sender = "0x" + err.data.slice(-40);
   }
 
   const code = await hre.ethers.provider.getCode(sender as AddressLike);
@@ -52,8 +51,8 @@ async function main() {
   };
 
   const res = await hre.ethers.provider.send("eth_estimateUserOperationGas", [
-    ENTRY_POINT_ADDRESS,
     userOp,
+    ENTRY_POINT_ADDRESS,
   ]);
 
   console.log({ res });
