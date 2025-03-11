@@ -11,7 +11,7 @@ async function main() {
   //* NOTE: By the first time of deploying and creating an smart account, the entryPoint will send 100 ETH to the paymaster
   try {
     await entryPoint.depositTo(PAYMASTER_ADDRESS, {
-      value: hre.ethers.parseEther(".2"),
+      value: hre.ethers.parseEther(".001"),
     });
 
     console.log("deposit successful!");
