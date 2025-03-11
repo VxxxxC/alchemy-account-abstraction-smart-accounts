@@ -2,8 +2,8 @@ import { AddressLike } from "ethers";
 import * as hre from "hardhat";
 
 const ENTRY_POINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-const FACTORY_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
-const PAYMASTER_ADDRESS = "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0";
+const FACTORY_ADDRESS = "0xcef5e69c4a94928571a49e68d0c906d529aac31b";
+const PAYMASTER_ADDRESS = "0x69e87b5a5d7f0ea7ef61b7e32edb9d48012bde42";
 
 async function main() {
   const [signer, signer1] = await hre.ethers.getSigners();
@@ -28,6 +28,7 @@ async function main() {
   try {
     await entryPoint.getSenderAddress(initCode);
   } catch (err: any) {
+    console.log("err : ", err);
     sender = "0x" + err.data.data.slice(-40);
   }
 
@@ -42,7 +43,7 @@ async function main() {
 
   const userOp = {
     sender, //* NOTE: SMART ACCOUNT ADDRESS
-    nonce: await entryPoint.getNonce(sender, 0),
+    nonce: "0x" + (await entryPoint.getNonce(sender, 0)).toString(16),
     initCode,
     callData: Account.interface.encodeFunctionData("execute"),
     paymasterAndData: PAYMASTER_ADDRESS,
@@ -54,6 +55,8 @@ async function main() {
     ENTRY_POINT_ADDRESS,
     userOp,
   ]);
+
+  console.log({ res });
 
   //? TODO: implement by calling from real API data, instead using fake hardcode gas value data
   // callGasLimit: 500_000, //! BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
