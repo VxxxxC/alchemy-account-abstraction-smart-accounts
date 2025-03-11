@@ -1,7 +1,7 @@
 import { AddressLike } from "ethers";
 import * as hre from "hardhat";
 
-const ENTRY_POINT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+const ENTRY_POINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const FACTORY_ADDRESS = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 const PAYMASTER_ADDRESS = "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0";
 
@@ -48,6 +48,11 @@ async function main() {
     paymasterAndData: PAYMASTER_ADDRESS,
     signature: "0x",
   };
+
+  const res = await hre.ethers.provider.send("eth_estimateUserOperationGas", [
+    ENTRY_POINT_ADDRESS,
+    userOp,
+  ]);
 
   //? TODO: implement by calling from real API data, instead using fake hardcode gas value data
   // callGasLimit: 500_000, //! BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
