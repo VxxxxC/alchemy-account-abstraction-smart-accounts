@@ -7,8 +7,8 @@ async function main() {
   const accountFactory = await hre.viem.deployContract("AccountFactory");
   console.log("Account Factory deployed at : ", accountFactory.address);
 
-  const paymaster = await hre.viem.deployContract("Paymaster");
-  console.log("Paymaster deployed at : ", paymaster.address);
+  // const paymaster = await hre.viem.deployContract("Paymaster");
+  // console.log("Paymaster deployed at : ", paymaster.address);
 }
 
 main().catch((err) => {

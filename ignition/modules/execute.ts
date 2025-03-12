@@ -2,7 +2,7 @@ import { AddressLike, BigNumberish, BytesLike } from "ethers";
 import * as hre from "hardhat";
 
 const ENTRY_POINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-const FACTORY_ADDRESS = "0xcef5e69c4a94928571a49e68d0c906d529aac31b";
+const FACTORY_ADDRESS = "0x302524f0640b71705672637e42e6eab7a3960859";
 const PAYMASTER_ADDRESS = "0x69e87b5a5d7f0ea7ef61b7e32edb9d48012bde42";
 
 interface userOp {
@@ -84,9 +84,13 @@ async function main() {
   userOp.signature = await signer.signMessage(hre.ethers.getBytes(userOpHash));
   // userOp.signature = await signer1.signMessage(hre.ethers.getBytes(userOpHash)); //* NOTE: THIS SIGNATURE FROM ANOTHER ACCOUNT , FOR TRYING THE EXPECTED 'FailedOp(0, "AA24 signature error")' ERROR ON EXECUTION
 
-  const tx = await entryPoint.handleOps([userOp], address);
-  const receipt = await tx.wait();
-  console.log({ receipt });
+  const opHast = await hre.ethers.provider.send("eth_sendUserOperation", [userOp, ENTRY_POINT_ADDRESS]);
+
+  console.log({opHast});
+
+  // const tx = await entryPoint.handleOps([userOp], address);
+  // const receipt = await tx.wait();
+  // console.log({ receipt });
 }
 
 main().catch((err) => {

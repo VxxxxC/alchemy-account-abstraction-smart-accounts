@@ -45,7 +45,19 @@ contract AccountFactory {
         }
 
         //* NOTE: amount, salt, bytecode
-        return Create2.deploy(0, salt, bytecode);
+        return deploy(salt, bytecode);
+    }
+
+    function deploy(
+        bytes32 salt,
+        bytes memory bytecode
+    ) internal returns (address addr) {
+        require(bytecode.length != 0, "Create2: bytecode length is zero");
+        /// @solidity memory-safe-assembly
+        assembly {
+            addr := create2(0, add(bytecode, 0x20), mload(bytecode), salt)
+        }
+        require(addr != address(0), "Create2: Failed on deploy");
     }
 }
 
