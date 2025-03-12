@@ -64,21 +64,21 @@ async function main() {
       "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
   };
 
+  //? TODO: implement by calling from real API data, instead using fake hardcode gas value data
   const { callGasLimit, verificationGasLimit, preVerificationGas } = await hre.ethers.provider.send("eth_estimateUserOperationGas", [
     userOp,
     ENTRY_POINT_ADDRESS,
   ]);
-
   userOp.callGasLimit = callGasLimit;
   userOp.preVerificationGas = preVerificationGas;
   userOp.verificationGasLimit = verificationGasLimit;
 
   const { maxFeePerGas } = await hre.ethers.provider.getFeeData();
-
   userOp.maxFeePerGas = "0x" + maxFeePerGas?.toString(16);
 
-  //? TODO: implement by calling from real API data, instead using fake hardcode gas value data
-  // maxPriorityFeePerGas: hre.ethers.parseUnits("10", "gwei"),
+  const maxPriorityFeePerGas = await hre.ethers.provider.send("rundler_maxPriorityFeePerGas");
+  userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
+
 
   const userOpHash = await entryPoint.getUserOpHash(userOp);
   userOp.signature = await signer.signMessage(hre.ethers.getBytes(userOpHash));
