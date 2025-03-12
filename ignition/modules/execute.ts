@@ -50,7 +50,7 @@ async function main() {
       "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
   };
 
-  const res = await hre.ethers.provider.send("eth_estimateUserOperationGas", [
+  const { callGasLimit, verificationGasLimit, preVerificationGas } = await hre.ethers.provider.send("eth_estimateUserOperationGas", [
     userOp,
     ENTRY_POINT_ADDRESS,
   ]);

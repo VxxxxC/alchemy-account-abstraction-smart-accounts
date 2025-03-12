@@ -1,7 +1,7 @@
 import * as hre from "hardhat";
 
-const ENTRY_POINT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
-const PAYMASTER_ADDRESS = "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0";
+const ENTRY_POINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
+const PAYMASTER_ADDRESS = "0x69e87b5a5d7f0ea7ef61b7e32edb9d48012bde42";
 
 async function main() {
   const entryPoint = await hre.ethers.getContractAt(
@@ -11,7 +11,7 @@ async function main() {
   //* NOTE: By the first time of deploying and creating an smart account, the entryPoint will send 100 ETH to the paymaster
   try {
     await entryPoint.depositTo(PAYMASTER_ADDRESS, {
-      value: hre.ethers.parseEther(".05"),
+      value: hre.ethers.parseEther(".1"),
     });
 
     console.log("deposit successful!");
