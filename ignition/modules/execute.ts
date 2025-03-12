@@ -85,8 +85,13 @@ async function main() {
   // userOp.signature = await signer1.signMessage(hre.ethers.getBytes(userOpHash)); //* NOTE: THIS SIGNATURE FROM ANOTHER ACCOUNT , FOR TRYING THE EXPECTED 'FailedOp(0, "AA24 signature error")' ERROR ON EXECUTION
 
   const opHast = await hre.ethers.provider.send("eth_sendUserOperation", [userOp, ENTRY_POINT_ADDRESS]);
-
   console.log({opHast});
+
+  setTimeout(async () => {
+    const txHash = await hre.ethers.provider.send("eth_getUserOperationByHash", [opHast]);
+    console.log({txHash});
+
+  }, 5000)
 
   // const tx = await entryPoint.handleOps([userOp], address);
   // const receipt = await tx.wait();
