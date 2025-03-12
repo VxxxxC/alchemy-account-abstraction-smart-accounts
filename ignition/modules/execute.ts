@@ -1,9 +1,23 @@
-import { AddressLike } from "ethers";
+import { AddressLike, BigNumberish, BytesLike } from "ethers";
 import * as hre from "hardhat";
 
 const ENTRY_POINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 const FACTORY_ADDRESS = "0xcef5e69c4a94928571a49e68d0c906d529aac31b";
 const PAYMASTER_ADDRESS = "0x69e87b5a5d7f0ea7ef61b7e32edb9d48012bde42";
+
+interface userOp {
+   sender: AddressLike;
+   nonce: BytesLike;
+   initCode: BytesLike;
+   callData: BytesLike;
+   callGasLimit?: BigNumberish;
+   verificationGasLimit?: BigNumberish;
+   preVerificationGas?: BigNumberish;
+   maxFeePerGas?: BigNumberish;
+   maxPriorityFeePerGas?: BigNumberish;
+   paymasterAndData: BytesLike;
+   signature: BytesLike;
+}
 
 async function main() {
   const [signer, signer1] = await hre.ethers.getSigners();
@@ -28,7 +42,7 @@ async function main() {
   try {
     await entryPoint.getSenderAddress(initCode);
   } catch (err: any) {
-    sender = "0x" + err.data.slice(-40);
+    sender = "0x" + err.data.slice(-40) as any;
   }
 
   const code = await hre.ethers.provider.getCode(sender as AddressLike);
@@ -40,7 +54,7 @@ async function main() {
 
   const Account = await hre.ethers.getContractFactory("Account");
 
-  const userOp = {
+  const userOp: userOp = {
     sender, //* NOTE: SMART ACCOUNT ADDRESS
     nonce: "0x" + (await entryPoint.getNonce(sender, 0)).toString(16),
     initCode,
@@ -55,7 +69,9 @@ async function main() {
     ENTRY_POINT_ADDRESS,
   ]);
 
-  console.log({ res });
+  userOp.callGasLimit = callGasLimit;
+  userOp.preVerificationGas = preVerificationGas;
+  userOp.verificationGasLimit = verificationGasLimit;
 
   //? TODO: implement by calling from real API data, instead using fake hardcode gas value data
   // callGasLimit: 500_000, //! BUG: IF 200_00 WILL FAIL AS 'FailedOp(0, "AA13 initCode failed or OOG")'
