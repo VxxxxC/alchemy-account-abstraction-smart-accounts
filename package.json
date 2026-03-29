@@ -25,6 +25,7 @@
   },
   "overrides": {
     "serialize-javascript": "^7.0.4",
-    "undici": "^6.24.1"
+    "undici": "^6.24.1",
+    "handlebars": "^4.7.9"
   }
 }
